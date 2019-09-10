@@ -1,0 +1,58 @@
+---
+- hosts: all
+- name: Postfix
+  tasks:
+  - name: Installing latest Postfix
+    yum:
+      name: postfix
+      state: latest
+  - name: Enabling the service
+    service:
+      name: postfix
+      enabled: yes
+  - name: Starting the service
+    service:
+      name: postfix
+      state: started
+  - name: Adding smtp in firewall
+    firewalld:
+      zone: public
+      service: smtp
+      permanent: yes
+      state: enabled
+  - name: Entries in posfix file
+    lineinfile:
+      path: /etc/postfix/main.cf
+      regexp: 'mydestination =$'
+      line: 'mydestination='
+
+  - name: Entries in posfix file
+    lineinfile:
+      path: /etc/postfix/main.cf
+      line: 'relayhost=[smtp1.example.com]'
+
+
+  - name: Entries in posfix file
+    lineinfile:
+      path: /etc/postfix/main.cf
+      line: 'myorigin=desktop1.example.com'
+
+  - name: Entries in posfix file
+    lineinfile:
+      path: /etc/postfix/main.cf
+      line: 'local_transport=error: Disabled'
+  
+  - name: Entries in posfix file
+    lineinfile:
+      path: /etc/postfix/main.cf
+      line: 'mynetworks=127.0.0.0/8 [::1]/128'
+
+  - name: Entries in posfix file
+    lineinfile:
+      path: /etc/postfix/main.cf
+      line: 'inet_interfaces=loopback-only'
+      
+  - name: restarting the service
+    service:
+      name: postfix
+      state: restarted

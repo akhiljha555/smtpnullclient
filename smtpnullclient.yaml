@@ -1,10 +1,13 @@
 ---
-- hosts: all
 - name: Postfix
+  become_user: root
+  become: yes
+  #my virtual machine IP
+  hosts: 192.168.122.135
   tasks:
   - name: Installing latest Postfix
     yum:
-      name: postfix
+      name: postfix-2:3.3.1-8.el8.x86_64
       state: latest
   - name: Enabling the service
     service:

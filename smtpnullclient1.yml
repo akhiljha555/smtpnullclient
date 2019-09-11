@@ -1,8 +1,8 @@
+#ssh password = redhat
 ---
 - name: Postfix
   become_user: root
   become: yes
-  #ansible_become_pass: redhat
   hosts: 192.168.122.135 #VM ip
   tasks:
   - name: Installing latest Postfix
